@@ -1,8 +1,8 @@
 import type { FastifyInstance } from "fastify";
 import { z } from "zod";
-import { db } from "../../inc/db";
-import { idParam } from "../../schemas/punishment";
-import { serverSchemas } from "../../lib/openapi";
+import { db } from "~/inc/db";
+import { idParam } from "~/schemas/punishment";
+import { serverSchemas } from "~/lib/openapi";
 
 const serverListQuery = z.object({
     page: z.coerce.number().int().positive().default(1),
