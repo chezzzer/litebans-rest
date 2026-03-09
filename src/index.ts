@@ -22,6 +22,24 @@ app.setErrorHandler((error, req, res) => {
     return res.status(500).send({ error: "Internal server error" });
 });
 
+if (env.API_TOKENS) {
+    const tokens = env.API_TOKENS;
+    app.addHook("onRequest", async (req, res) => {
+        if (req.url.startsWith("/reference")) return;
+
+        const header = req.headers.authorization;
+        const token = header?.startsWith("Bearer ") ? header.slice(7) : null;
+
+        if (!token || !tokens.has(token)) {
+            return res.status(401).send({ error: "Unauthorized" });
+        }
+    });
+} else {
+    console.warn(
+        "WARNING: API_TOKENS is not set. All endpoints are publicly accessible. Set API_TOKENS to enable authentication.",
+    );
+}
+
 app.register(swagger, {
     openapi: {
         info: {
@@ -33,6 +51,15 @@ app.register(swagger, {
                 url: "https://github.com/chezzzer",
             },
         },
+        components: {
+            securitySchemes: {
+                bearerAuth: {
+                    type: "http",
+                    scheme: "bearer",
+                },
+            },
+        },
+        security: [{ bearerAuth: [] }, {}],
         tags: [
             { name: "Bans", description: "Ban management" },
             { name: "Kicks", description: "Kick management" },
@@ -59,5 +86,7 @@ app.register(historyRouter, { prefix: "/history" });
 app.register(serverRouter, { prefix: "/servers" });
 
 app.listen({ port: env.PORT }, () => {
-    console.log("Server listening on port " + env.PORT);
+    console.log(
+        `Server listening on port ${env.PORT}\nView documentation at http://localhost:${env.PORT}/reference`,
+    );
 });

@@ -6,6 +6,10 @@ const envSchema = z.object({
         .default("development"),
     DATABASE_URL: z.url(),
     PORT: z.coerce.number().int().positive().default(3000),
+    API_TOKENS: z
+        .string()
+        .transform((v) => new Set(v.split(",").map((t) => t.trim()).filter(Boolean)))
+        .optional(),
 });
 
 const parsed = envSchema.safeParse(process.env);

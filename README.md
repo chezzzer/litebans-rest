@@ -55,13 +55,27 @@ bun run start
 | `DATABASE_URL` | Yes | - | PostgreSQL connection string pointing to your LiteBans database |
 | `PORT` | No | `3000` | Port the server listens on |
 | `NODE_ENV` | No | `development` | `development`, `production`, or `test` |
+| `API_TOKENS` | No | - | Comma-separated list of API tokens. If not set, auth is disabled |
 
 ### Example `.env`
 
 ```env
 DATABASE_URL=postgres://user:password@localhost:5432/litebans
 PORT=3000
+API_TOKENS=my-secret-token,another-token
 ```
+
+### Authentication
+
+When `API_TOKENS` is set, all API endpoints require a Bearer token in the `Authorization` header:
+
+```
+Authorization: Bearer my-secret-token
+```
+
+The `/reference` documentation page is always accessible without authentication.
+
+> **Warning:** If `API_TOKENS` is not set, all endpoints are publicly accessible with no authentication. A warning will be logged on startup. Always set `API_TOKENS` in production.
 
 ## API Endpoints
 
