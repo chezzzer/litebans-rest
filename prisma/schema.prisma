@@ -1,0 +1,178 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model litebans_allow {
+  id   Int   @id @default(autoincrement())
+  uuid Bytes
+  type Int   @db.SmallInt
+}
+
+model litebans_bans {
+  id                Int       @id @default(autoincrement())
+  uuid              String?   @db.VarChar(36)
+  ip                String?   @db.VarChar(45)
+  reason            String?   @db.VarChar(2048)
+  banned_by_uuid    String    @db.VarChar(36)
+  banned_by_name    String?   @db.VarChar(128)
+  removed_by_uuid   String?   @db.VarChar(36)
+  removed_by_name   String?   @db.VarChar(128)
+  removed_by_reason String?   @db.VarChar(2048)
+  removed_by_date   DateTime? @db.Timestamp(6)
+  time              BigInt
+  until             BigInt
+  template          Int       @default(255) @db.SmallInt
+  server_scope      String?   @db.VarChar(32)
+  server_origin     String?   @db.VarChar(32)
+  silent            String    @db.Bit(1)
+  ipban             String    @db.Bit(1)
+  ipban_wildcard    String    @default("0") @db.Bit(1)
+  active            String    @db.Bit(1)
+
+  @@index([active], map: "idx_litebans_bans_active")
+  @@index([banned_by_uuid], map: "idx_litebans_bans_banned_by_uuid")
+  @@index([ip], map: "idx_litebans_bans_ip")
+  @@index([ipban], map: "idx_litebans_bans_ipban")
+  @@index([ipban_wildcard], map: "idx_litebans_bans_ipban_wildcard")
+  @@index([template], map: "idx_litebans_bans_template")
+  @@index([time], map: "idx_litebans_bans_time")
+  @@index([until], map: "idx_litebans_bans_until")
+  @@index([uuid], map: "idx_litebans_bans_uuid")
+}
+
+model litebans_cache8k {
+  id Int   @id @db.SmallInt
+  b  Bytes
+}
+
+model litebans_config {
+  id       Int    @id @default(autoincrement())
+  version  String @db.VarChar(128)
+  build    String @db.VarChar(128)
+  timezone String @default("+00:00") @db.VarChar(64)
+  accept   Int    @default(0) @db.SmallInt
+}
+
+model litebans_history {
+  id   Int       @id @default(autoincrement())
+  date DateTime? @default(now()) @db.Timestamp(6)
+  name String?   @db.VarChar(16)
+  uuid String?   @db.VarChar(36)
+  ip   String?   @db.VarChar(45)
+
+  @@index([ip], map: "idx_litebans_history_ip")
+  @@index([name], map: "idx_litebans_history_name")
+  @@index([uuid], map: "idx_litebans_history_uuid")
+}
+
+model litebans_kicks {
+  id             Int     @id @default(autoincrement())
+  uuid           String? @db.VarChar(36)
+  ip             String? @db.VarChar(45)
+  reason         String? @db.VarChar(2048)
+  banned_by_uuid String  @db.VarChar(36)
+  banned_by_name String? @db.VarChar(128)
+  time           BigInt
+  until          BigInt
+  template       Int     @default(255) @db.SmallInt
+  server_scope   String? @db.VarChar(32)
+  server_origin  String? @db.VarChar(32)
+  silent         String  @db.Bit(1)
+  ipban          String  @db.Bit(1)
+  ipban_wildcard String  @default("0") @db.Bit(1)
+  active         String  @db.Bit(1)
+
+  @@index([active], map: "idx_litebans_kicks_active")
+  @@index([banned_by_uuid], map: "idx_litebans_kicks_banned_by_uuid")
+  @@index([ip], map: "idx_litebans_kicks_ip")
+  @@index([ipban], map: "idx_litebans_kicks_ipban")
+  @@index([ipban_wildcard], map: "idx_litebans_kicks_ipban_wildcard")
+  @@index([template], map: "idx_litebans_kicks_template")
+  @@index([time], map: "idx_litebans_kicks_time")
+  @@index([until], map: "idx_litebans_kicks_until")
+  @@index([uuid], map: "idx_litebans_kicks_uuid")
+}
+
+model litebans_mutes {
+  id                Int       @id @default(autoincrement())
+  uuid              String?   @db.VarChar(36)
+  ip                String?   @db.VarChar(45)
+  reason            String?   @db.VarChar(2048)
+  banned_by_uuid    String    @db.VarChar(36)
+  banned_by_name    String?   @db.VarChar(128)
+  removed_by_uuid   String?   @db.VarChar(36)
+  removed_by_name   String?   @db.VarChar(128)
+  removed_by_reason String?   @db.VarChar(2048)
+  removed_by_date   DateTime? @db.Timestamp(6)
+  time              BigInt
+  until             BigInt
+  template          Int       @default(255) @db.SmallInt
+  server_scope      String?   @db.VarChar(32)
+  server_origin     String?   @db.VarChar(32)
+  silent            String    @db.Bit(1)
+  ipban             String    @db.Bit(1)
+  ipban_wildcard    String    @default("0") @db.Bit(1)
+  active            String    @db.Bit(1)
+
+  @@index([active], map: "idx_litebans_mutes_active")
+  @@index([banned_by_uuid], map: "idx_litebans_mutes_banned_by_uuid")
+  @@index([ip], map: "idx_litebans_mutes_ip")
+  @@index([ipban], map: "idx_litebans_mutes_ipban")
+  @@index([ipban_wildcard], map: "idx_litebans_mutes_ipban_wildcard")
+  @@index([template], map: "idx_litebans_mutes_template")
+  @@index([time], map: "idx_litebans_mutes_time")
+  @@index([until], map: "idx_litebans_mutes_until")
+  @@index([uuid], map: "idx_litebans_mutes_uuid")
+}
+
+model litebans_servers {
+  id   Int       @id @default(autoincrement())
+  name String    @db.VarChar(32)
+  uuid String    @db.VarChar(32)
+  date DateTime? @default(now()) @db.Timestamp(6)
+}
+
+model litebans_sync {
+  id   Int       @id @default(autoincrement())
+  info Int
+  msg  String    @db.VarChar(4096)
+  time DateTime? @default(now()) @db.Timestamp(6)
+}
+
+model litebans_warnings {
+  id                Int       @id @default(autoincrement())
+  uuid              String?   @db.VarChar(36)
+  ip                String?   @db.VarChar(45)
+  reason            String?   @db.VarChar(2048)
+  banned_by_uuid    String    @db.VarChar(36)
+  banned_by_name    String?   @db.VarChar(128)
+  removed_by_uuid   String?   @db.VarChar(36)
+  removed_by_name   String?   @db.VarChar(128)
+  removed_by_reason String?   @db.VarChar(2048)
+  removed_by_date   DateTime? @db.Timestamp(6)
+  time              BigInt
+  until             BigInt
+  template          Int       @default(255) @db.SmallInt
+  server_scope      String?   @db.VarChar(32)
+  server_origin     String?   @db.VarChar(32)
+  silent            String    @db.Bit(1)
+  ipban             String    @db.Bit(1)
+  ipban_wildcard    String    @default("0") @db.Bit(1)
+  active            String    @db.Bit(1)
+  warned            String    @db.Bit(1)
+
+  @@index([active], map: "idx_litebans_warnings_active")
+  @@index([banned_by_uuid], map: "idx_litebans_warnings_banned_by_uuid")
+  @@index([ip], map: "idx_litebans_warnings_ip")
+  @@index([ipban], map: "idx_litebans_warnings_ipban")
+  @@index([ipban_wildcard], map: "idx_litebans_warnings_ipban_wildcard")
+  @@index([template], map: "idx_litebans_warnings_template")
+  @@index([time], map: "idx_litebans_warnings_time")
+  @@index([until], map: "idx_litebans_warnings_until")
+  @@index([uuid], map: "idx_litebans_warnings_uuid")
+}
