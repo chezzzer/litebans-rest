@@ -1,13 +1,5 @@
 {
     "buildCommand": "bun run vercel-build",
     "installCommand": "bun install",
-    "functions": {
-        "api/index.js": {
-            "runtime": "@vercel/node@3",
-            "includeFiles": "api/index.js"
-        }
-    },
-    "rewrites": [
-        { "source": "/(.*)", "destination": "/api" }
-    ]
+    "rewrites": [{ "source": "/(.*)", "destination": "/api" }]
 }
