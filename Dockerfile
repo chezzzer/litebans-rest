@@ -18,7 +18,7 @@ FROM base AS generate
 COPY --from=install /temp/dev/node_modules node_modules
 COPY package.json prisma.config.ts ./
 COPY prisma/ prisma/
-RUN bunx prisma generate
+RUN bun node_modules/.bin/prisma generate
 
 # copy production dependencies and generated prisma client into final image
 FROM base AS release
