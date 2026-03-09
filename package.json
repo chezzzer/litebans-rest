@@ -10,8 +10,7 @@
         "db:studio": "prisma studio",
         "db:dev": "docker-compose -f 'dev-db/docker-compose.yml' up -d",
         "start": "bun run src/index.ts",
-        "dev": "bun run src/index.ts --watch",
-        "vercel-build": "prisma generate --schema prisma/schema.prisma && bun build src/vercel.ts --outfile api/index.js --target node --format esm"
+        "dev": "bun run src/index.ts --watch"
     },
     "devDependencies": {
         "@types/bun": "latest",
