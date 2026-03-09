@@ -20,7 +20,7 @@ A REST API for interacting with [LiteBans](https://www.spigotmc.org/resources/li
 docker run -d \
   -p 3000:3000 \
   -e DATABASE_URL="postgres://user:password@host:5432/litebans" \
-  ghcr.io/chezzzer/litebans-rest:latest
+  ghcr.io/chezzzer/litebans-rest:main
 ```
 
 ### Docker Compose
@@ -28,7 +28,7 @@ docker run -d \
 ```yaml
 services:
   litebans-rest:
-    image: ghcr.io/chezzzer/litebans-rest:latest
+    image: ghcr.io/chezzzer/litebans-rest:main
     ports:
       - "3000:3000"
     environment:
