@@ -1,12 +1,12 @@
 import type { FastifyInstance } from "fastify";
-import { db } from "~/inc/db";
+import { db } from "../../inc/db";
 import {
     createHistorySchema,
     updateHistorySchema,
     historyListQuery,
-} from "~/schemas/history";
-import { idParam } from "~/schemas/punishment";
-import { historySchemas } from "~/lib/openapi";
+} from "../../schemas/history";
+import { idParam } from "../../schemas/punishment";
+import { historySchemas } from "../../lib/openapi";
 
 export default async function historyRouter(app: FastifyInstance) {
     app.get("/", { schema: historySchemas.list }, async (req) => {

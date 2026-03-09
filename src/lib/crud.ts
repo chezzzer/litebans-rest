@@ -1,6 +1,6 @@
 import type { FastifyReply, FastifyRequest } from "fastify";
 import { serializeRecord, prepareBitFields } from "./serialize";
-import { punishmentListQuery, idParam } from "~/schemas/punishment";
+import { punishmentListQuery, idParam } from "../schemas/punishment";
 
 interface Schema {
     parse(data: unknown): Record<string, unknown>;

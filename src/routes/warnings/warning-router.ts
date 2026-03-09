@@ -1,11 +1,11 @@
 import type { FastifyInstance } from "fastify";
-import { db } from "~/inc/db";
+import { db } from "../../inc/db";
 import {
     createWarningSchema,
     updateWarningSchema,
-} from "~/schemas/punishment";
-import { createPunishmentCrud } from "~/lib/crud";
-import { warningSchemas } from "~/lib/openapi";
+} from "../../schemas/punishment";
+import { createPunishmentCrud } from "../../lib/crud";
+import { warningSchemas } from "../../lib/openapi";
 
 export default async function warningRouter(app: FastifyInstance) {
     const handlers = createPunishmentCrud(

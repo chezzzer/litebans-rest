@@ -1,8 +1,8 @@
 import type { FastifyInstance } from "fastify";
-import { db } from "~/inc/db";
-import { createBanSchema, updateBanSchema } from "~/schemas/punishment";
-import { createPunishmentCrud } from "~/lib/crud";
-import { banSchemas } from "~/lib/openapi";
+import { db } from "../../inc/db";
+import { createBanSchema, updateBanSchema } from "../../schemas/punishment";
+import { createPunishmentCrud } from "../../lib/crud";
+import { banSchemas } from "../../lib/openapi";
 
 export default async function banRouter(app: FastifyInstance) {
     const handlers = createPunishmentCrud(

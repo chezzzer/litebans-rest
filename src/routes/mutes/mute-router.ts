@@ -1,8 +1,8 @@
 import type { FastifyInstance } from "fastify";
-import { db } from "~/inc/db";
-import { createMuteSchema, updateMuteSchema } from "~/schemas/punishment";
-import { createPunishmentCrud } from "~/lib/crud";
-import { muteSchemas } from "~/lib/openapi";
+import { db } from "../../inc/db";
+import { createMuteSchema, updateMuteSchema } from "../../schemas/punishment";
+import { createPunishmentCrud } from "../../lib/crud";
+import { muteSchemas } from "../../lib/openapi";
 
 export default async function muteRouter(app: FastifyInstance) {
     const handlers = createPunishmentCrud(

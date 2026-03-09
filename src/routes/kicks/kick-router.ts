@@ -1,8 +1,8 @@
 import type { FastifyInstance } from "fastify";
-import { db } from "~/inc/db";
-import { createKickSchema, updateKickSchema } from "~/schemas/punishment";
-import { createPunishmentCrud } from "~/lib/crud";
-import { kickSchemas } from "~/lib/openapi";
+import { db } from "../../inc/db";
+import { createKickSchema, updateKickSchema } from "../../schemas/punishment";
+import { createPunishmentCrud } from "../../lib/crud";
+import { kickSchemas } from "../../lib/openapi";
 
 export default async function kickRouter(app: FastifyInstance) {
     const handlers = createPunishmentCrud(
