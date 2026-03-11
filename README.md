@@ -2,6 +2,8 @@
 
 A REST API for interacting with [LiteBans](https://www.spigotmc.org/resources/litebans.3715/) punishment data over HTTP.
 
+[API Reference](https://registry.scalar.com/@chezzer/apis/litebans-rest-api@latest)
+
 > **Note:** Only PostgreSQL is supported. Make sure your LiteBans instance is configured to use a PostgreSQL database.
 
 ## Features
@@ -9,7 +11,7 @@ A REST API for interacting with [LiteBans](https://www.spigotmc.org/resources/li
 - Full CRUD for bans, kicks, mutes, warnings, and history
 - Read-only server listing
 - Paginated responses with filtering support
-- Interactive API documentation via [Scalar](https://scalar.com) at `/reference`
+- Interactive API documentation hosted on [Scalar](https://registry.scalar.com/@chezzer/apis/litebans-rest-api@latest) or `/reference` when running the app.
 - OpenAPI spec available at `/reference/openapi.json`
 
 ## Hosting
@@ -20,7 +22,7 @@ A REST API for interacting with [LiteBans](https://www.spigotmc.org/resources/li
 docker run -d \
   -p 3000:3000 \
   -e DATABASE_URL="postgres://user:password@host:5432/litebans" \
-  ghcr.io/chezzzer/litebans-rest:latest
+  ghcr.io/chezzzer/litebans-rest:main
 ```
 
 ### Docker Compose
@@ -28,7 +30,7 @@ docker run -d \
 ```yaml
 services:
   litebans-rest:
-    image: ghcr.io/chezzzer/litebans-rest:latest
+    image: ghcr.io/chezzzer/litebans-rest:main
     ports:
       - "3000:3000"
     environment:

@@ -92,7 +92,7 @@ app.register(warningRouter, { prefix: "/warnings" });
 app.register(historyRouter, { prefix: "/history" });
 app.register(serverRouter, { prefix: "/servers" });
 
-app.listen({ port: env.PORT }, () => {
+app.listen({ port: env.PORT, host: '0.0.0.0' }, () => {
     console.log(
         `Server listening on port ${env.PORT}\nView documentation at http://localhost:${env.PORT}/reference`,
     );
