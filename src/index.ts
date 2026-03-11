@@ -9,13 +9,20 @@ import muteRouter from "./routes/mutes/mute-router";
 import serverRouter from "./routes/servers/server-router";
 import warningRouter from "./routes/warnings/warning-router";
 
-const app = fastify();
+const app = fastify({ logger: env.NODE_ENV !== "production" });
 
 app.setErrorHandler((error, req, res) => {
     if (error instanceof ZodError) {
         return res.status(400).send({
             error: "Validation error",
             details: error.issues,
+        });
+    }
+    const unknownError = error as any;
+    if (unknownError.name === "FastifyError") {
+        return res.status(400).send({
+            error: "Error",
+            details: unknownError.message,
         });
     }
     req.log.error(error);
@@ -65,7 +72,7 @@ app.register(swagger, {
             { name: "Kicks", description: "Kick management" },
             { name: "Mutes", description: "Mute management" },
             { name: "Warnings", description: "Warning management" },
-            { name: "History", description: "Player history" },
+            { name: "History", description: "Player history (read-only)" },
             { name: "Servers", description: "Registered servers (read-only)" },
         ],
     },

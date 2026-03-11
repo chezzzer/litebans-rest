@@ -3,8 +3,9 @@ import { Pool } from "pg";
 import { env } from "~/inc/env";
 import { PrismaClient } from "../../generated/prisma";
 
+export const pool = new Pool({ connectionString: env.DATABASE_URL });
+
 const createPrismaClient = () => {
-    const pool = new Pool({ connectionString: env.DATABASE_URL });
     const adapter = new PrismaPg(pool);
 
     return new PrismaClient({

@@ -1,3 +1,5 @@
+import { API_SERVER_NAME } from "./sync";
+
 const idParam = {
     type: "object" as const,
     properties: { id: { type: "integer" } },
@@ -19,10 +21,19 @@ const punishmentListQuerystring = {
     properties: {
         page: { type: "integer", default: 1, minimum: 1 },
         per_page: { type: "integer", default: 20, minimum: 1, maximum: 100 },
-        uuid: { type: "string", maxLength: 36, description: "Minecraft player UUID" },
+        uuid: {
+            type: "string",
+            maxLength: 36,
+            description: "Minecraft player UUID",
+        },
         ip: { type: "string", maxLength: 45 },
         active: { type: "string", enum: ["true", "false"] },
-        banned_by_uuid: { type: "string", maxLength: 36, description: "Minecraft UUID of the staff member who issued the punishment" },
+        banned_by_uuid: {
+            type: "string",
+            maxLength: 36,
+            description:
+                "Minecraft UUID of the staff member who issued the punishment",
+        },
     },
 };
 
@@ -36,8 +47,12 @@ const basePunishmentProps = {
     time: { type: "string" as const, description: "BigInt as string" },
     until: { type: "string" as const, description: "BigInt as string" },
     template: { type: "integer" as const, default: 255 },
-    server_scope: { type: "string" as const, maxLength: 32 },
-    server_origin: { type: "string" as const, maxLength: 32 },
+    server_scope: { type: "string" as const, maxLength: 32, default: "*" },
+    server_origin: {
+        type: "string" as const,
+        maxLength: 32,
+        default: API_SERVER_NAME,
+    },
     silent: { type: "boolean" as const },
     ipban: { type: "boolean" as const },
     ipban_wildcard: { type: "boolean" as const },
@@ -156,14 +171,24 @@ function createResourceSchemas(
             operationId: `delete${name}`,
             params: idParam,
             response: {
-                204: { type: "null" as const, description: `${name} deleted successfully` },
+                204: {
+                    type: "null" as const,
+                    description: `${name} deleted successfully`,
+                },
                 404: errorResponse,
             },
         },
     };
 }
 
-const punishmentRequired = ["banned_by_uuid", "time", "until"];
+const punishmentRequired = [
+    "banned_by_uuid",
+    "time",
+    "until",
+    "uuid",
+    "reason",
+    "banned_by_name",
+];
 
 export const banSchemas = createResourceSchemas(
     banProps,
@@ -199,39 +224,93 @@ const historyListQuerystring = {
     properties: {
         page: { type: "integer", default: 1, minimum: 1 },
         per_page: { type: "integer", default: 20, minimum: 1, maximum: 100 },
-        uuid: { type: "string", maxLength: 36, description: "Minecraft player UUID" },
+        uuid: {
+            type: "string",
+            maxLength: 36,
+            description: "Minecraft player UUID",
+        },
         ip: { type: "string", maxLength: 45 },
-        name: { type: "string", maxLength: 16, description: "Minecraft player name" },
+        name: {
+            type: "string",
+            maxLength: 16,
+            description: "Minecraft player name",
+        },
     },
 };
 
-export const historySchemas = createResourceSchemas(
-    historyProps,
-    [],
-    historyListQuerystring,
-    "History",
-    "History",
-);
-
-const serverProps = {
-    id: { type: "integer" as const },
-    name: { type: "string" as const, maxLength: 32, description: "Server name" },
-    uuid: { type: "string" as const, maxLength: 32, description: "Server UUID" },
-    date: { type: "string" as const, format: "date-time" as const, description: "Date the server was registered" },
-};
-
-const serverItem = { type: "object" as const, properties: serverProps };
+const historyItem = { type: "object" as const, properties: historyProps };
 const errorResponse = {
     type: "object" as const,
     properties: { error: { type: "string" as const } },
 };
+
+export const historySchemas = {
+    list: {
+        tags: ["History"],
+        summary: "List History",
+        description:
+            "Retrieve a paginated list of player history entries.",
+        operationId: "listHistory",
+        querystring: historyListQuerystring,
+        response: {
+            200: {
+                description: "A paginated list of history entries",
+                type: "object" as const,
+                properties: {
+                    data: { type: "array" as const, items: historyItem },
+                    pagination: paginationResponse,
+                },
+            },
+        },
+    },
+    getById: {
+        tags: ["History"],
+        summary: "Get History by ID",
+        description: "Retrieve a single history entry by its unique ID.",
+        operationId: "getHistoryById",
+        params: idParam,
+        response: {
+            200: {
+                description: "The requested history entry",
+                type: "object" as const,
+                properties: { data: historyItem },
+            },
+            404: errorResponse,
+        },
+    },
+};
+
+const serverProps = {
+    id: { type: "integer" as const },
+    name: {
+        type: "string" as const,
+        maxLength: 32,
+        description: "Server name",
+    },
+    uuid: {
+        type: "string" as const,
+        maxLength: 32,
+        description: "Server UUID",
+    },
+    date: {
+        type: "string" as const,
+        format: "date-time" as const,
+        description: "Date the server was registered",
+    },
+};
+
+const serverItem = { type: "object" as const, properties: serverProps };
 
 const serverListQuerystring = {
     type: "object" as const,
     properties: {
         page: { type: "integer", default: 1, minimum: 1 },
         per_page: { type: "integer", default: 20, minimum: 1, maximum: 100 },
-        name: { type: "string", maxLength: 32, description: "Filter by server name" },
+        name: {
+            type: "string",
+            maxLength: 32,
+            description: "Filter by server name",
+        },
     },
 };
 

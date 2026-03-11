@@ -1,6 +1,7 @@
 import type { FastifyReply, FastifyRequest } from "fastify";
 import { serializeRecord, prepareBitFields } from "./serialize";
 import { punishmentListQuery, idParam } from "~/schemas/punishment";
+import { writeSyncEntry } from "./sync";
 
 interface Schema {
     parse(data: unknown): Record<string, unknown>;
@@ -68,6 +69,7 @@ export function createPunishmentCrud(
             const body = createSchema.parse(req.body);
             const data = prepareBitFields(body);
             const record = await model.create({ data });
+            await writeSyncEntry(resourceName, "create", record);
             return res.status(201).send({ data: serializeRecord(record) });
         },
 
@@ -83,6 +85,7 @@ export function createPunishmentCrud(
 
             const data = prepareBitFields(body);
             const record = await model.update({ where: { id }, data });
+            await writeSyncEntry(resourceName, "update", record);
             return { data: serializeRecord(record) };
         },
 
@@ -94,6 +97,7 @@ export function createPunishmentCrud(
                     .status(404)
                     .send({ error: `${resourceName} not found` });
             await model.delete({ where: { id } });
+            await writeSyncEntry(resourceName, "remove", existing);
             return res.status(204).send();
         },
     };
